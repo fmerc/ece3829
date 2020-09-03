@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineer: 
+// Engineer: Tai "Hunter" Kjendal
 // 
 // Create Date: 09/02/2020 06:49:32 PM
 // Design Name: 
@@ -9,7 +9,9 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: 
+// Description: Drives a 4-digit 7-segment display on an FPGA, 
+//              requires four 4-bit inputs, one 2-bit input, 
+//              and outputs for the display.
 // 
 // Dependencies: 
 // 
@@ -21,47 +23,57 @@
 
 
 module seven_seg(
-    input       [3:0] A,      
-    input       [3:0] B,
-    input       [3:0] C,
-    input       [3:0] D,      
-    input       [1:0] SEL,  // selector
+    input       [3:0] A,    // input A, switches 0-3
+    input       [3:0] B,    // input B, switches 4-7
+    input       [3:0] C,    // input C, switches 8-11
+    input       [3:0] D,    // input D, switches 12-15
+    input       [1:0] SEL,  // selector, left & right push buttons
     output  reg [6:0] seg,  // 7-segment cathodes
     output  reg [3:0] an    // 7-segment anodes
     );
     
     reg     [3:0] in; // select between 4 inputs
     
-    // display constants
-    parameter zero  =   7'b1000000;
-    parameter one   =   7'b1111001;
-    parameter two   =   7'b0100100;
-    parameter three =   7'b0110000;
-    parameter four  =   7'b0011001;
-    parameter five  =   7'b0010010;
-    parameter six   =   7'b0000010;
-    parameter seven =   7'b1111000;
-    parameter eight =   7'b0000000;
-    parameter nine  =   7'b0010000;
-    parameter aaaa  =   7'b0001000;
-    parameter bbbb  =   7'b0000011;
-    parameter cccc  =   7'b1000110;
-    parameter dddd  =   7'b0100001;
-    parameter eeee  =   7'b0000110;
-    parameter ffff  =   7'b0001110;
+    // 7 segment display constants (0-F)
+    parameter zero  =   7'b1000000; // 7-segment '0'
+    parameter one   =   7'b1111001; // 7-segment '1'
+    parameter two   =   7'b0100100; // '2'
+    parameter three =   7'b0110000; // '3'
+    parameter four  =   7'b0011001; // '4'
+    parameter five  =   7'b0010010; // '5'
+    parameter six   =   7'b0000010; // '6'
+    parameter seven =   7'b1111000; // '7'
+    parameter eight =   7'b0000000; // '8'
+    parameter nine  =   7'b0010000; // '9'
+    parameter aaaa  =   7'b0001000; // 'A'
+    parameter bbbb  =   7'b0000011; // 'b'
+    parameter cccc  =   7'b1000110; // 'C'
+    parameter dddd  =   7'b0100001; // 'd'
+    parameter eeee  =   7'b0000110; // 'E'
+    parameter ffff  =   7'b0001110; // 'F'
     
     
     always @ (SEL) begin
-        
-        case (SEL)
-            2'b00: begin    an = 4'b1110;   in = A; end
-            2'b01: begin    an = 4'b1101;   in = B; end
-            2'b10: begin    an = 4'b1011;   in = C; end
-            2'b11: begin    an = 4'b0111;   in = D; end
+        // For each SEL case, turn on corresponding anode, 
+        //    and connect corresponding input
+        case (SEL)          
+            2'b00: begin    
+                an = 4'b1110;   // turn on first (right most) 7-seg
+                in = A; end     // set input to 'A' switches
+            2'b01: begin    
+                an = 4'b1101;   // turn on second 7-seg
+                in = B; end     // set input to 'B' switches
+            2'b10: begin    
+                an = 4'b1011;   // turn on third 7-seg
+                in = C; end     // set input to 'C' switches
+            2'b11: begin    
+                an = 4'b0111;   // turn on last (left most) 7-seg 
+                in = D; end     // set input to 'D' switches
             default: an = 4'b1111;
         endcase
         
-        case (in)
+        // display 7-segment digit corresponding to 4-bit value 'in'
+        case (in)   
             4'b0000: seg = zero;
             4'b0001: seg = one;
             4'b0010: seg = two;

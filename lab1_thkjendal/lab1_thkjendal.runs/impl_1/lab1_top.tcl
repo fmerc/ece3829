@@ -17,7 +17,7 @@ proc create_report { reportName command } {
   }
 }
 namespace eval ::optrace {
-  variable script "C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/lab1_thkjendal/lab1_thkjendal.runs/impl_1/lab1_top.tcl"
+  variable script "C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab1_thkjendal/lab1_thkjendal.runs/impl_1/lab1_top.tcl"
   variable category "vivado_impl"
 }
 
@@ -129,15 +129,15 @@ OPTRACE "create in-memory project" START { }
   set_param project.singleFileAddWarning.threshold 0
 OPTRACE "create in-memory project" END { }
 OPTRACE "set parameters" START { }
-  set_property webtalk.parent_dir {C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/lab1_thkjendal/lab1_thkjendal.cache/wt} [current_project]
-  set_property parent.project_path {C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/lab1_thkjendal/lab1_thkjendal.xpr} [current_project]
-  set_property ip_output_repo {{C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/lab1_thkjendal/lab1_thkjendal.cache/ip}} [current_project]
+  set_property webtalk.parent_dir {C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab1_thkjendal/lab1_thkjendal.cache/wt} [current_project]
+  set_property parent.project_path {C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab1_thkjendal/lab1_thkjendal.xpr} [current_project]
+  set_property ip_output_repo {{C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab1_thkjendal/lab1_thkjendal.cache/ip}} [current_project]
   set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "set parameters" END { }
 OPTRACE "add files" START { }
-  add_files -quiet {{C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/lab1_thkjendal/lab1_thkjendal.runs/synth_1/lab1_top.dcp}}
+  add_files -quiet {{C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab1_thkjendal/lab1_thkjendal.runs/synth_1/lab1_top.dcp}}
 OPTRACE "read constraints: implementation" START { }
-  read_xdc {{C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/lab1_thkjendal/lab1_thkjendal.srcs/constrs_1/new/seven_seg.xdc}}
+  read_xdc {{C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab1_thkjendal/lab1_thkjendal.srcs/constrs_1/new/seven_seg.xdc}}
 OPTRACE "read constraints: implementation" END { }
 OPTRACE "add files" END { }
 OPTRACE "link_design" START { }
@@ -305,7 +305,7 @@ OPTRACE "read constraints: write_bitstream" END { }
   catch { write_mem_info -force lab1_top.mmi }
 OPTRACE "write_bitstream setup" END { }
 OPTRACE "write_bitstream" START { }
-  write_bitstream -force lab1_top.bit 
+  write_bitstream -force lab1_top.bit -bin_file
 OPTRACE "write_bitstream" END { }
 OPTRACE "write_bitstream misc" START { }
 OPTRACE "read constraints: write_bitstream_post" START { }
