@@ -1,0 +1,3 @@
+# ECE 3829
+ECE 3829 lab work\
+FPGA: Artix-7 XC7A35T-1CPG236C
