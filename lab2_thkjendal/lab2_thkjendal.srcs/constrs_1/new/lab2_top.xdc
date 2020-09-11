@@ -1,10 +1,10 @@
-# Clock
+## Clock
 set_property PACKAGE_PIN W5 [get_ports clk_fpga]
     set_property IOSTANDARD LVCMOS33 [get_ports clk_fpga]
     create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports clk_fpga]
 
 
-# Switches
+## Switches
 set_property PACKAGE_PIN V17 [get_ports {sw[0]}]
     set_property IOSTANDARD LVCMOS33 [get_ports {sw[0]}]
 set_property PACKAGE_PIN V16 [get_ports {sw[1]}]
@@ -39,12 +39,12 @@ set_property PACKAGE_PIN R2 [get_ports {sw[15]}]
     set_property IOSTANDARD LVCMOS33 [get_ports {sw[15]}]     
 
 ## Buttons
-#set_property PACKAGE_PIN T17 [get_ports {btn[0]}]
-#    set_property IOSTANDARD LVCMOS33 [get_ports {btn[0]}]
+set_property PACKAGE_PIN U18 [get_ports reset]
+    set_property IOSTANDARD LVCMOS33 [get_ports reset]
 #set_property PACKAGE_PIN W19 [get_ports {btn[1]}]
 #    set_property IOSTANDARD LVCMOS33 [get_ports {btn[1]}]
 
-# 7 Segment Display
+## 7 Segment Display
 set_property PACKAGE_PIN W7 [get_ports {seg[0]}]
     set_property IOSTANDARD LVCMOS33 [get_ports {seg[0]}]
 set_property PACKAGE_PIN W6 [get_ports {seg[1]}]
@@ -68,6 +68,41 @@ set_property PACKAGE_PIN V4 [get_ports {an[2]}]
     set_property IOSTANDARD LVCMOS33 [get_ports {an[2]}]
 set_property PACKAGE_PIN W4 [get_ports {an[3]}]
     set_property IOSTANDARD LVCMOS33 [get_ports {an[3]}]
+    
+## VGA
+# red
+set_property PACKAGE_PIN G19 [get_ports {vga_r[0]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_r[0]}]
+set_property PACKAGE_PIN H19 [get_ports {vga_r[1]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_r[1]}]
+set_property PACKAGE_PIN J19 [get_ports {vga_r[2]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_r[2]}]
+set_property PACKAGE_PIN N19 [get_ports {vga_r[3]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_r[3]}]
+# green
+set_property PACKAGE_PIN J17 [get_ports {vga_g[0]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_g[0]}]
+set_property PACKAGE_PIN H17 [get_ports {vga_g[1]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_g[1]}]
+set_property PACKAGE_PIN G17 [get_ports {vga_g[2]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_g[2]}]
+set_property PACKAGE_PIN D17 [get_ports {vga_g[3]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_g[3]}]
+# blue
+set_property PACKAGE_PIN N18 [get_ports {vga_b[0]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_b[0]}]
+set_property PACKAGE_PIN L18 [get_ports {vga_b[1]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_b[1]}]
+set_property PACKAGE_PIN K18 [get_ports {vga_b[2]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_b[2]}]
+set_property PACKAGE_PIN J18 [get_ports {vga_b[3]}]
+    set_property IOSTANDARD LVCMOS33 [get_ports {vga_b[3]}]
+# hsync, vsync
+set_property PACKAGE_PIN P19 [get_ports vga_hs]
+    set_property IOSTANDARD LVCMOS33 [get_ports vga_hs]
+set_property PACKAGE_PIN R19 [get_ports vga_vs]
+    set_property IOSTANDARD LVCMOS33 [get_ports vga_vs]
+
    
 ## LEDs
 #set_property PACKAGE_PIN U16 [get_ports {led[0]}]
@@ -102,3 +137,8 @@ set_property PACKAGE_PIN W4 [get_ports {an[3]}]
 #    set_property IOSTANDARD LVCMOS33 [get_ports {led[14]}]
 #set_property PACKAGE_PIN L1 [get_ports {led[15]}]
 #    set_property IOSTANDARD LVCMOS33 [get_ports {led[15]}]
+
+## CFGBVS-1#1 Warning
+#   Missing CFGBVS and CONFIG_VOLTAGE Design Properties
+set_property CFGBVS VCCO [current_design]           
+set_property CONFIG_VOLTAGE 3.3 [current_design]    

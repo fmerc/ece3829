@@ -27,45 +27,45 @@ module seven_seg(
     output  reg [3:0] an    // 7-segment anodes
     );
     
-    reg     [9:0] count;        // clk counter
+    reg    [18:0] count = 0;    // clk counter
     reg     [1:0] sel = 2'b00;  // initialize a select to switch segments 
     reg     [3:0] n;            // use to cycle segments
-    wire    [3:0] a, b, c, d;   // separate input into 4 different segments
-    assign  a = in[3:0];
-    assign  b = in[7:4];
-    assign  c = in[11:8];
-    assign  d = in[15:12];
         
+    // clock divider:   25MHz/200000 = 120Hz
     always @ (posedge clk) begin
-        if (count == 1000) begin
+        if (count == 100000) begin
             count <= 0;
             if (sel == 2'b11)
                 sel <= 2'b00;
             else
                 sel <= sel + 1;
-            end
+        end
         else
             count <= count + 1;
-        end 
+    end 
         
     // For each SEL case, turn on corresponding anode, 
     //    and connect corresponding input
-    always @ (sel) begin
+    always @ (sel, in) begin
         case (sel)          
             2'b00: begin    
-                an = 4'b1110;   // turn on first (right most) 7-seg
-                n = a; end      // set input to 1st 4 switches 
-            2'b01: begin    
-                an = 4'b1101;   // turn on second 7-seg
-                n = b; end      // set input to 2nd 4 switches
-            2'b10: begin    
-                an = 4'b1011;   // turn on third 7-seg
-                n = c; end      // set input to 3rd 4 switches
-            2'b11: begin    
-                an = 4'b0111;   // turn on last (left most) 7-seg 
-                n = d; end      // set input to last 4 switches 
+                n = in[3:0];    // set input to 1st 4 switches
+                an = 4'b1110;   // set anode to 1st segment
+                end 
+            2'b01: begin   
+                n = in[7:4];    // set input to 2nd 4 switches
+                an = 4'b1101;   // set anode to 2nd segment
+                end
+            2'b10: begin   
+                n = in[11:8];   // set input to 3rd 4 switches
+                an = 4'b1011;   // set anode to 3rd segment
+                end
+            2'b11: begin   
+                n = in[15:12];  // set input to last 4 switches
+                an = 4'b0111;   // set anode to last segment
+                end 
         endcase
-        end
+    end
         
     // 7 segment display constants (0-F)
     parameter zero  =   7'b1000000; // 7-segment '0'
@@ -105,6 +105,6 @@ module seven_seg(
             4'b1110: seg = eeee;
             4'b1111: seg = ffff;
         endcase
-        end
+    end
     
 endmodule
