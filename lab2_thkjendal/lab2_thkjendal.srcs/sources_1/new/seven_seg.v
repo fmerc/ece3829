@@ -9,7 +9,7 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: Displays a 16-bit value to a 4-digit, seven segment display
+// Description: Displays a 16-bit value to a 4-digit, seven segment display, at 120 Hz
 // 
 // Dependencies: 
 // 
