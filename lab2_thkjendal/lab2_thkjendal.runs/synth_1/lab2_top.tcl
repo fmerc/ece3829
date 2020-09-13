@@ -89,7 +89,6 @@ set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_verilog -library xil_defaultlib {
-  {C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab2_thkjendal/lab2_thkjendal.srcs/sources_1/new/blink.v}
   {C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab2_thkjendal/lab2_thkjendal.srcs/sources_1/new/seven_seg.v}
   {C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab2_thkjendal/lab2_thkjendal.srcs/sources_1/new/slowclock.v}
   {C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab2_thkjendal/lab2_thkjendal.srcs/sources_1/new/vga_display.v}

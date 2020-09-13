@@ -92,5 +92,3 @@ set_property src_info {type:XDC file:2 line:101 export:INPUT save:INPUT read:REA
 set_property PACKAGE_PIN P19 [get_ports vga_hs]
 set_property src_info {type:XDC file:2 line:103 export:INPUT save:INPUT read:READ} [current_design]
 set_property PACKAGE_PIN R19 [get_ports vga_vs]
-set_property src_info {type:XDC file:2 line:108 export:INPUT save:INPUT read:READ} [current_design]
-set_property PACKAGE_PIN U16 [get_ports {led}]
