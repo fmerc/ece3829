@@ -22,6 +22,7 @@
 
 module vga_display(
     input   clk_25MHz,      // 25MHz clock
+    input   clk_1Hz,        // 1Hz clock
     input   reset,          // reset
     input   [7:0] in,       // 8-bit input
     input   [3:0] sw,       // 4-bit slider input
@@ -45,12 +46,6 @@ module vga_display(
             .hcount(hcount),
             .vcount(vcount),
             .blank(blank));
-            
-            
-    wire clk_out;       // 1Hz signal
-    reg [5:0] c_x = 0;  // counter x
-    reg [4:0] c_y = 0;  // counter y
-    slowclock sclk1 (.clk(clk_25MHz), .clk_out(clk_out));
     
     // assign rgb outputs
     assign  red     = vga_color[11:8];
@@ -65,8 +60,21 @@ module vga_display(
     parameter [11:0] WHITE   = 12'b1111_1111_1111;
     parameter [11:0] BLACK   = 12'b0000_0000_0000;
 
+    reg [5:0] c_x = 0;  // counter x
+    reg [4:0] c_y = 0;  // counter y
+    always @ (posedge clk_1Hz) begin
+        if (c_x == 19 || c_y == 15) begin
+            c_x = 0;
+            c_y = 0;
+        end
+        else begin
+            c_x <= c_x + 1;
+            c_y <= c_y + 1;
+        end
+    end
+
     // display mode
-    always @ (vcount, hcount, sw, blank, clk_out, c_x, c_y) begin
+    always @ (vcount, hcount, sw, blank, c_x, c_y) begin
     
         if (blank)
             vga_color <= BLACK;
@@ -80,15 +88,14 @@ module vga_display(
                     vga_color <= (hcount > 575 && vcount < 64) ? BLUE : BLACK;
                 4'b0011:    // 32x32 white block on black background (top left)
                     vga_color <= (hcount < 32 && vcount <32) ? WHITE : BLACK;
-//                4'b0100:
-//                    if (clk_out)
-//                        vga_color <= (hcount+c_x < 32+c_x && hcount+c_x >= c_x &&
-//                                      vcount+c_y < 32+c_y && vcount+c_y >= c_y) ? 
-//                                      BLUE : RED;
-//                    else begin
-//                        c_x <= c_x + 1;
-//                        c_y <= c_y + 1;
-//                    end
+                
+                4'b0100: begin
+                    vga_color <= (hcount+c_x < 32+c_x && hcount+c_x >= c_x &&
+                                  vcount+c_y < 32+c_y && vcount+c_y >= c_y) ? 
+                                  BLUE : RED;
+                    
+                end
+                    
                 default:    // default state: black screen 
                     vga_color <= BLACK;
             endcase
