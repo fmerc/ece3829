@@ -22,6 +22,7 @@
 
 module vga_display(
     input   clk_1Hz,        // 1Hz clock
+    input   clk_60Hz,       // 60Hz clock
     input   [3:0] sw,       // 4-bit slider input
     input         blank,    // blank state
     input  [10:0] hcount, vcount,   // hcount and vcount
@@ -42,17 +43,12 @@ module vga_display(
     parameter [11:0] WHITE   = 12'b1111_1111_1111;
     parameter [11:0] BLACK   = 12'b0000_0000_0000;
 
-    reg [8:0]   c_x;    // square center x
-    reg [7:0]   c_y;    // square center y
-    
-//    counter count_xy(.clk(clk_1Hz),
-//                     .c1_max(8'b00010011),  // x counts 0 to 19
-//                     .c2_max(8'b00001110),  // y counts 0 to 14
-//                     .count1(c_x),
-//                     .count2(c_y),
-//                     .led(led));
+    reg [9:0]   c_x;    // square center x
+    reg [8:0]   c_y;    // square center y
+    reg [9:0]   c_x2;    // square center x2
+    reg [8:0]   c_y2;    // square center y2
 
-    // Part 3 x and y counters
+    // Part 3 x and y counters (wrap)
     always @ (posedge clk_1Hz) begin            
         c_x <= (c_x >= 19) ? 0 : c_x + 1;
     end
@@ -60,8 +56,31 @@ module vga_display(
     always @ (posedge clk_1Hz) begin            
         c_y <= (c_y >= 14) ? 0 : c_y + 1;
     end
+    
+    // Extra credit x and y counters (bounce)
+    reg i = 1, j = 1;  // when one, x2 and y2 count up, count down otherwise
+    always @ (posedge clk_60Hz) begin
+        if (i) begin
+            if (c_x2 == 608) i <= !i;
+            else c_x2 <= c_x2 + 2;
+        end
+        else if (!i) begin
+            if (c_x2 == 0) i <= !i;
+            else c_x2 <= c_x2 - 2;
+        end
+    end
+    
+    always @ (posedge clk_1Hz) begin            
+        if (j) begin
+            if (c_y2 == 608) j <= !j;
+            else c_y2 <= c_y2 + 1;
+        end
+        else if (!j) begin
+            if (c_y2 == 0) j <= !j;
+            else c_y2 <= c_y2 - 1;
+        end
+    end
 
-    // Extra credit
     // print namis jeff on screen
 
     // display mode
@@ -83,14 +102,17 @@ module vga_display(
                                     vcount <32 && vcount >= 0) ? 
                                     WHITE : BLACK;
                 
-                4'b0100:
+                4'b0100:    // 32x32 white block, black background, block 
+                            // moves down 1, right 1 at 1Hz
                     vga_color <= (hcount < (c_x + 32) && hcount >= c_x &&
                                   vcount < (c_y + 32) && vcount >= c_y) ? 
                                   WHITE : BLACK;
 //                    if (hcount < counter+32 && hcount >= counter) vga_color = WHITE; ....
                 
                 4'b0101: begin
-                    
+                    vga_color <= (  hcount < (c_x + 32) && hcount >= c_x &&
+                                    vcount < (c_y + 32) && vcount >= c_y    ) ? 
+                                  WHITE : BLACK;
                 
                 end
                     

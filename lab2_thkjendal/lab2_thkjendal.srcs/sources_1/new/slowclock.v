@@ -39,9 +39,9 @@ module slowclock(
             count   <= count + 1;
     end
         
-    // 25_000_000 / 200_000 = 120 up down cycle
+    // 25_000_000 / 100_000 = 120 up down cycle
     always @ (posedge clk_in) begin
-        if (count2 == 200000) begin
+        if (count2 == 100000) begin
             count2   <= 0; 
             clk_out2 <= !clk_out2;
         end

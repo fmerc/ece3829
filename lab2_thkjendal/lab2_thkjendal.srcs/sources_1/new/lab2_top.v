@@ -67,6 +67,7 @@ module lab2_top(
     vga_display disp1 ( 
             // input
             .clk_1Hz(clk_1Hz),
+            .clk_60Hz(clk_60Hz),
             .sw(sw[3:0]),
             .blank(blank),
             .hcount(hcount),

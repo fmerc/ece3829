@@ -31,14 +31,11 @@ module seven_seg(
     reg     [1:0] sel = 2'b00;  // initialize a select to switch segments 
     reg     [3:0] n;            // use to cycle segments
         
-    // clock divider:   25MHz/200000 = 120Hz
+    // update seven-segment at 60 Hz
     always @ (posedge clk) begin
         if (count == 100000) begin
             count <= 0;
-            if (sel == 2'b11)
-                sel <= 2'b00;
-            else
-                sel <= sel + 1;
+            sel <= (sel == 2'b11) ? 2'b00 : sel + 1;
         end
         else
             count <= count + 1;
