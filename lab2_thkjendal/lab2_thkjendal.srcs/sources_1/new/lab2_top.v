@@ -39,15 +39,6 @@ module lab2_top(
             .locked());             // output locked
     
     
-    // 1Hz CLOCK
-    wire    clk_1Hz;
-    wire    clk_60Hz;
-    slowclock sclk (.clk_in(clk_25MHz), // input (25MHz)
-                    .clk_out(clk_1Hz),  // output (1Hz)
-                    .clk_out2(clk_60Hz) // output (60Hz)
-                    );
-    
-    
     // VGA CONTROLLER
     wire    [10:0]  hcount, vcount;
     wire    blank;
@@ -66,8 +57,7 @@ module lab2_top(
     // VGA COLOR LOGIC
     vga_display disp1 ( 
             // input
-            .clk_1Hz(clk_1Hz),
-            .clk_60Hz(clk_60Hz),
+            .clk(clk_25MHz),
             .sw(sw[3:0]),
             .blank(blank),
             .hcount(hcount),
