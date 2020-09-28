@@ -9,7 +9,8 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: Displays a 16-bit value to a 4-digit, seven segment display, at 120 Hz
+// Description: Displays a 16-bit value to a 4-digit, seven segment display.
+//              Takes a 10MHz signal, refreshes each segment at 60 Hz.
 // 
 // Dependencies: 
 // 
@@ -27,13 +28,13 @@ module seven_seg(
     output  reg [3:0] an    // 7-segment anodes
     );
     
-    reg    [18:0] count = 0;    // clk counter
+    reg    [16:0] count = 0;    // clk counter
     reg     [1:0] sel = 2'b00;  // initialize a select to switch segments 
     reg     [3:0] n;            // use to cycle segments
         
-    // update seven-segment at 60 Hz
+    // update each seven-segment at 60 Hz: 10,000,000 / (60*4) = 40000
     always @ (posedge clk) begin
-        if (count == 100000) begin
+        if (count == 40000) begin
             count <= 0;
             sel <= (sel == 2'b11) ? 2'b00 : sel + 1;
         end
@@ -81,6 +82,7 @@ module seven_seg(
     parameter dddd  =   7'b0100001; // 'd'
     parameter eeee  =   7'b0000110; // 'E'
     parameter ffff  =   7'b0001110; // 'F'
+    parameter dash  =   7'b0111111; // '-'
         
     // display 7-segment digit corresponding to 4-bit value 'n'
     always @ (n) begin
@@ -101,6 +103,7 @@ module seven_seg(
             4'b1101: seg = dddd;
             4'b1110: seg = eeee;
             4'b1111: seg = ffff;
+            default: seg = dash;
         endcase
     end
     
