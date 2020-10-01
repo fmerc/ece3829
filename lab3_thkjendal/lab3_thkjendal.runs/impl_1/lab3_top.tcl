@@ -137,7 +137,7 @@ OPTRACE "set parameters" START { }
 OPTRACE "set parameters" END { }
 OPTRACE "add files" START { }
   add_files -quiet {{C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab3_thkjendal/lab3_thkjendal.runs/synth_1/lab3_top.dcp}}
-  read_ip -quiet {{c:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab3_thkjendal/lab3_thkjendal.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci}}
+  read_ip -quiet {{C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab3_thkjendal/lab3_thkjendal.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci}}
 OPTRACE "read constraints: implementation" START { }
   read_xdc {{C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab3_thkjendal/lab3_thkjendal.srcs/constrs_1/new/lab3_top.xdc}}
 OPTRACE "read constraints: implementation" END { }

@@ -70,6 +70,7 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
+set_param chipscope.maxJobs 2
 set_param xicom.use_bs_reader 1
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a35tcpg236-1
@@ -88,10 +89,11 @@ set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_verilog -library xil_defaultlib {
+  {C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab3_thkjendal/lab3_thkjendal.srcs/sources_1/new/light_sensor.v}
   {C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab2_thkjendal/lab2_thkjendal.srcs/sources_1/new/seven_seg.v}
   {C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab3_thkjendal/lab3_thkjendal.srcs/sources_1/new/lab3_top.v}
 }
-read_ip -quiet {{c:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab3_thkjendal/lab3_thkjendal.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci}}
+read_ip -quiet {{C:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab3_thkjendal/lab3_thkjendal.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci}}
 set_property used_in_implementation false [get_files -all {{c:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab3_thkjendal/lab3_thkjendal.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_board.xdc}}]
 set_property used_in_implementation false [get_files -all {{c:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab3_thkjendal/lab3_thkjendal.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc}}]
 set_property used_in_implementation false [get_files -all {{c:/Users/hunte/OneDrive/Documents/WPI/Y3/ECE 3829/Labs/lab3_thkjendal/lab3_thkjendal.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0_ooc.xdc}}]
