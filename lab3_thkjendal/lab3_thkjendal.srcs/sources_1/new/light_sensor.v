@@ -9,7 +9,7 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description:                                     insert description
+// Description: SPI interface to read 8 bits of light sensor information. 
 // 
 // Dependencies: 
 // 
@@ -26,8 +26,19 @@ module light_sensor(
     input       sdo,        // master in slave out
     output reg  sclk,       // serial clock (1 Hz)
     output reg  cs,         // chip select (active high)
-    output [7:0] light_val  // 8-bit light readings
+    output reg [7:0] light_val  // 8-bit light readings
     );
+    
+    // for simulation purposes
+    parameter cs_delay = 500000;
+    
+    // stuff
+    parameter [1:0] s0 = 2'b00, s1 = 2'b01, s2 = 2'b10, s3 = 2'b11;
+    wire    rst_shift, start_shift, end_shift;
+    reg     [2:0]   count_shift = 3'b0;     // track number of shifts (8)
+    reg     [7:0]   read = 8'b0;            // buffer to load sdo data onto
+    reg     [1:0]   current_state = s0,     // track current and next states 
+                    next_state = s0;
 
     // 10 to 1 MHz clock divider - Slow Clock
     reg [3:0] count = 0;    // clk counter
@@ -40,30 +51,23 @@ module light_sensor(
     reg [18:0]  count_cs = 0;
     always @ (posedge sclk) begin
         cs <= (count_cs < 16) ? 0 : 1;    
-        count_cs <= (count_cs >= 499_999) ? 0 : count_cs + 1;    
+        count_cs <= (count_cs >= (cs_delay - 1)) ? 0 : count_cs + 1;
+        if (count_cs == 12) light_val <= read;
     end
-
     
-    // READ LIGHT SENSOR
-    
-    parameter [1:0] s0 = 2'b00, s1 = 2'b01, s2 = 2'b10, s3 = 2'b11;
-    wire    rst_shift, start_shift, end_shift;
-    reg     [3:0]   count_shift = 4'b0;     // track number of shifts (8)
-    reg     [14:0]  read = 15'b0;           // buffer to load sdo onto
-    reg     [1:0]   current_state = s0,     // track current and next states 
-                    next_state = s0;
-    
-    always @ (posedge sclk, posedge reset)  // handle resets
+    // sm sequential logic
+    always @ (posedge sclk, posedge reset)  // handle state transitions
         current_state <= (reset) ? s0 : next_state;
     
-    // state machine
-    always @ (current_state, sclk, cs, count_shift)
+    // sm combinational logic
+    always @ (current_state, sclk, cs, end_shift) begin
         case (current_state)
             s0: next_state = (sclk && !cs) ? s1 : s0;   // wait for control to start sequence
             s1: next_state = s2;                        // reset shift register
             s2: next_state = s3;                        // start shift register
-            s3: next_state = (count_shift == 15) ? s0 : s3;     // wait for shift to finish
+            s3: next_state = (end_shift) ? s0 : s3;     // wait for shift to finish
         endcase
+    end
     assign rst_shift = current_state == s1;
     assign start_shift = current_state == s2 || current_state == s3;
     
@@ -74,10 +78,9 @@ module light_sensor(
             read <= 8'b0;
         end
         else if (start_shift) begin
-            read <= {read[13:0], sdo};
+            read <= {read[6:0], sdo};
             count_shift <= count_shift + 1;
         end
+    assign end_shift = (count_shift==8) ? 1 : 0;
     
-    assign light_val = read[11:4];
-
 endmodule

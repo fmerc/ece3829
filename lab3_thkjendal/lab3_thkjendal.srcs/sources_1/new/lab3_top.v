@@ -9,7 +9,7 @@
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description:                             Insert Description
+// Description: Reads a light sensor and displays the 8 bit value on a seven segment display.
 // 
 // Dependencies: 
 // 
