@@ -21,7 +21,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module seven_seg(
+module seven_seg (
     input      [15:0] in,   // 16-bit input
     input             clk,  // 10 MHz clock
     output  reg [6:0] seg,  // 7-segment cathodes

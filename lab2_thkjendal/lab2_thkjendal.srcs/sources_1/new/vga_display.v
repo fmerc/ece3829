@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module vga_display(
+module vga_display (
     input   clk,            // 25MHz clock
     input   [3:0] sw,       // 4-bit slider input
     input         blank,    // blank state

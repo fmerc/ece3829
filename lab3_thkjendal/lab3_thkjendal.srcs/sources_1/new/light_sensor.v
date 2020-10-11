@@ -3,13 +3,13 @@
 // Company: 
 // Engineer: Tai Kjendal
 // 
-// Create Date: 09/28/2020 04:05:41 PM
+// Create Date: 10/11/2020 11:17:41 AM
 // Design Name: 
 // Module Name: light_sensor
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
-// Description: SPI interface to read 8 bits of light sensor information. 
+// Description: SPI interface to read 8 bits of light sensor information at 10 Hz. 
 // 
 // Dependencies: 
 // 
@@ -29,9 +29,6 @@ module light_sensor(
     output reg [7:0] light_val  // 8-bit light readings
     );
     
-    // for simulation purposes
-    parameter cs_delay = 500000;
-    
     // stuff
     parameter [1:0] s0 = 2'b00, s1 = 2'b01, s2 = 2'b10, s3 = 2'b11;
     wire    rst_shift, start_shift, end_shift;
@@ -47,11 +44,11 @@ module light_sensor(
         count <= (count == 9) ? 0 : count + 1;
     end
     
-    // 1 MHz to 2Hz clock divider - Chip Select
-    reg [18:0]  count_cs = 0;
+    // 1 MHz to 10Hz clock divider - Chip Select
+    reg [16:0]  count_cs = 0;
     always @ (posedge sclk) begin
         cs <= (count_cs < 16) ? 0 : 1;    
-        count_cs <= (count_cs >= (cs_delay - 1)) ? 0 : count_cs + 1;
+        count_cs <= (count_cs >= 99999) ? 0 : count_cs + 1;
         if (count_cs == 12) light_val <= read;
     end
     
