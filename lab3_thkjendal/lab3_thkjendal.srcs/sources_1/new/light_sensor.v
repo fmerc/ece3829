@@ -26,7 +26,9 @@ module light_sensor(
     input       sdo,        // master in slave out
     output reg  sclk,       // serial clock (1 Hz)
     output reg  cs,         // chip select (active high)
-    output reg [7:0] light_val  // 8-bit light readings
+    output reg [7:0] light_val, // 8-bit light readings
+    output reg [3:0] cnt_first, // count 0-9 (lab 4)
+    output reg [3:0] cnt_second // count 0-9 (second digit)
     );
     
     // stuff
@@ -45,11 +47,20 @@ module light_sensor(
     end
     
     // 1 MHz to 10Hz clock divider - Chip Select
-    reg [16:0]  count_cs = 0;
+    reg [18:0]  count_cs = 0;
     always @ (posedge sclk) begin
         cs <= (count_cs < 16) ? 0 : 1;    
         count_cs <= (count_cs >= 99999) ? 0 : count_cs + 1;
-        if (count_cs == 12) light_val <= read;
+        if (count_cs == 12) begin
+            light_val <= read;
+            
+            if (cnt_first == 4'd9) begin
+                cnt_first <= 0;
+                cnt_second <= (cnt_second == 4'd9) ? 0 : cnt_second + 1;
+            end
+            else
+                cnt_first <= cnt_first + 1;
+        end
     end
     
     // sm sequential logic

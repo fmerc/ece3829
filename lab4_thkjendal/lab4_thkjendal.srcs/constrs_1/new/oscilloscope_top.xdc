@@ -8,6 +8,10 @@ set_property PACKAGE_PIN W5 [get_ports clk_fpga]
 set_property PACKAGE_PIN U18 [get_ports reset]
     set_property IOSTANDARD LVCMOS33 [get_ports reset]
 
+## Switches
+set_property PACKAGE_PIN V17 [get_ports sw]
+    set_property IOSTANDARD LVCMOS33 [get_ports sw]
+
 
 ## PmodALS Light Sensor (SPI interface JB)
 # master-in-slave-out

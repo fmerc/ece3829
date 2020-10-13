@@ -28,6 +28,7 @@ module oscilloscope_top(
     input   ls_sdo,
     output  ls_sclk, ls_cs,
     // VGA DISPLAY
+    input             sw,                   // switch
     output      [3:0] vga_r, vga_g, vga_b,  // vga rgb values
     output            vga_hs, vga_vs,       // vga hsync/vsync
     // 7 SEG DISPLAY
@@ -47,13 +48,17 @@ module oscilloscope_top(
         
     // LIGHT SENSOR SPI INTERFACE
     wire    [7:0] light_val;
+    wire    [3:0] cnt_1;
+    wire    [3:0] cnt_2;
     light_sensor SPI1 (
         .clk(clk_10M),          // input clock (10MHz)
         .reset(reset),          // input reset
         .sdo(ls_sdo),           // input master-in-slave-out
         .sclk(ls_sclk),         // output slowclock (1MHz)
         .cs(ls_cs),             // output chip select
-        .light_val(light_val)   // output light sensor values
+        .light_val(light_val),  // output light sensor values
+        .cnt_first(cnt_1),      // first/second digits of 0-99 counter
+        .cnt_second(cnt_2)
         );
     
     // VGA CONTROLLER
@@ -62,7 +67,7 @@ module oscilloscope_top(
     vga_controller_640_60 VGA1 (
         // input
         .rst(reset),
-        .pixel_clk(clk_25MHz),
+        .pixel_clk(clk_25M),
         // output
         .HS(vga_hs), .VS(vga_vs),
         .hcount(hcount), .vcount(vcount),
@@ -72,9 +77,11 @@ module oscilloscope_top(
     // VGA COLOR LOGIC
     vga_color DISP1 ( 
         // input
-        .clk(clk_25MHz),
+        .clk(clk_25M),
         .reset(reset),
         .blank(blank),
+        .sw(sw),
+        .light_val(light_val),
         .hcount(hcount), .vcount(vcount),
         // output
         .red(vga_r), .green(vga_g), .blue(vga_b)
@@ -83,7 +90,7 @@ module oscilloscope_top(
     
     // SEVEN SEGMENT DISPLAY
     seven_seg SEG1 (
-        .in({8'h92, light_val}),// input data
+        .in({cnt_2, cnt_1, light_val}),// input data
         .clk(clk_10M),          // input clock (10MHz)
         .seg(sseg_seg),         // output segment
         .an(sseg_an)            // output anodes
